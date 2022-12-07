@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 h1 {
   position: relative;
   color: #fff;

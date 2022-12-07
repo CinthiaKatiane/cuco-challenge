@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar color="#2095F2" class="nav-bar">
-    <v-container class="teste">
+  <v-toolbar class="nav-bar">
+    <v-container>
       <v-row justify="center" align="center">
         <v-col cols="10">
           <v-row justify="space-between">
@@ -56,14 +56,11 @@ export default {
   width: 100%;
 }
 
-.teste {
-  position: relative;
-}
-
 .router-link {
   text-decoration: none;
   color: inherit;
 }
+
 .button-font {
   color: white !important;
   text-transform: capitalize;
