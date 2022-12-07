@@ -30,26 +30,9 @@
         >
           Excluir
         </v-btn>
-        <v-overlay class="overlay-delete" v-model="overlay">
-          <v-card class="check-card">
-            <v-icon size="x-large" class="alert-icon"> mdi-alert </v-icon>
-            <h2>Atenção</h2>
-            <p>
-              Você tem certeza que quer excluir o(s) cliente(s) selecionado(s)?
-            </p>
-            <v-row>
-              <v-col>
-                <v-btn flat @click="overlay = false" style="color: #969cb2">
-                  Cancelar
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn color="#E52E4D" @click="remove" style="color: white">
-                  Excluir
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card>
+        <v-overlay class="overlay-card" v-model="overlay">
+          <card-overlay @remove="removeClient" @close="closeOverlay">
+          </card-overlay>
         </v-overlay>
       </v-col>
     </v-row>
@@ -115,9 +98,13 @@
 
 <script>
 import axios from "axios";
+import CardOverlay from "./CardOverlay.vue";
 
 export default {
   name: "DisplayClients",
+  components: {
+    CardOverlay,
+  },
   data() {
     return {
       allSelected: false,
@@ -189,7 +176,7 @@ export default {
           ? this.pagesLabel.total
           : this.pagination.page * pp;
     },
-    async remove() {
+    async removeClient() {
       for (const [key, value] of Object.entries(this.userIds)) {
         console.log(key, value);
         await axios
@@ -199,6 +186,9 @@ export default {
           });
       }
       this.next(1);
+      this.closeOverlay();
+    },
+    closeOverlay() {
       this.overlay = false;
     },
     selectAll() {
@@ -240,12 +230,6 @@ h1 {
   border-radius: 6px;
 }
 
-.overlay-delete {
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-}
-
 .table-title {
   padding-left: 20px;
   padding-right: 20px;
@@ -259,24 +243,10 @@ h1 {
   color: inherit;
 }
 
-.check-card {
-  display: flex;
-  flex-direction: column;
+.overlay-card {
+  justify-content: center;
   align-items: center;
-  padding: 30px;
-  gap: 24px;
-  background: #fff;
-  border-radius: 6px;
-  align-self: center;
-}
-
-.alert-icon {
-  background: #feebc8;
-  color: #dd6b20;
-  width: 60px;
-  height: 60px;
-  border-radius: 50px;
-  padding-bottom: 2px;
+  align-content: center;
 }
 
 .result-not-found {

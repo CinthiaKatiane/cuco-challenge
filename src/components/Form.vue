@@ -4,6 +4,7 @@
       <v-col>
         <v-text-field
           v-model="usr.name"
+          :rules="nameRules"
           label="Nome"
           variant="solo"
         ></v-text-field>
@@ -22,6 +23,7 @@
       <v-col>
         <v-text-field
           v-model="usr.birthdate"
+          :rules="birthdateRules"
           label="Data de Nascimento"
           variant="solo"
           placeholder="aaaa-mm-dd"
@@ -65,9 +67,17 @@ export default {
         phone: "",
         birthdate: "",
       },
+      nameRules: [
+        (v) => !!v || "Insira um Nome",
+        (v) => /^[A-Z][a-z].*$/.test(v) || "Insira um nome valido",
+      ],
+      birthdateRules: [
+        (v) => !!v || "Insira uma Data de Nascimento",
+        (v) => /^\d{4}-\d{2}-\d{2}$/.test(v) || "Insira uma data valida",
+      ],
       cpfRules: [
         (v) => !!v || "Insira um CPF",
-        (v) => /^\d{3}.\d{3}.\d{3}-\d{2}$/.test(v) || "Insira CPF valido",
+        (v) => /^\d{3}.\d{3}.\d{3}-\d{2}$/.test(v) || "Insira um CPF valido",
       ],
     };
   },
@@ -104,9 +114,7 @@ export default {
   },
   computed: {
     isComplete() {
-      return (
-        this.usr.name && this.usr.cpf && this.usr.birthdate && this.usr.phone
-      );
+      return this.usr.name && this.usr.cpf && this.usr.birthdate;
     },
   },
 };
