@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <h1>Editar Cliente</h1>
-    <InputForm />
-  </div>
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col cols="10">
+        <h1>Editar Cliente</h1>
+        <InputForm :userId="$route.params.id" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -14,3 +18,10 @@ export default {
   },
 };
 </script>
+
+<style>
+h1 {
+  position: relative;
+  color: #fff;
+}
+</style>

@@ -38,7 +38,7 @@
             >
               Excluir
             </v-btn>
-            <v-overlay v-model="overlay">
+            <v-overlay class="overlay-delete" v-model="overlay">
               <v-card class="check-card">
                 <v-icon size="x-large" color="orange" class="alert-icon">
                   mdi-alert
@@ -88,7 +88,10 @@
                 <p>{{ user.phone }}</p>
               </v-col>
               <v-col cols="2" align-self="center">
-                <router-link to="/edit" class="router-link">
+                <router-link
+                  :to="{ path: '/edit/' + user.id }"
+                  class="router-link"
+                >
                   <v-btn prepend-icon="mdi-pencil" color="success">
                     Editar
                   </v-btn>
@@ -97,9 +100,8 @@
             </v-row>
           </v-card>
           <v-pagination
-            v-if="users.length % pagination.perPage < 1"
             v-model="pagination.page"
-            :length="pagination.total / pagination.perPage"
+            :length="pagination.total"
             :total-visible="pagination.visible"
             @input="next"
           ></v-pagination>
@@ -146,6 +148,7 @@ export default {
     },
   },
   created() {
+    this.getSize();
     this.next(1);
   },
   methods: {
@@ -167,7 +170,9 @@ export default {
       axios
         .get(`http://localhost:3003/clients?q=${this.search}`)
         .then((res) => {
-          this.pagination.total = res.data.length;
+          let totalPages_pre = res.data.length / 5;
+          this.pagination.total =
+            res.data.length % 5 == 0 ? totalPages_pre : totalPages_pre + 1;
         })
         .catch((error) => {
           console.log(error);
@@ -176,7 +181,17 @@ export default {
     checkRemove() {
       this.overlay = !this.overlay;
     },
-    remove() {
+    async remove() {
+      console.log(this.userIds);
+      for (const [key, value] of Object.entries(this.userIds)) {
+        console.log(key, value);
+        await axios
+          .delete(`http://localhost:3003/clients/${value}`)
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      this.next(1);
       this.overlay = false;
     },
     selectAll() {
@@ -191,10 +206,17 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.overlay-delete {
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 .cards {
   margin-bottom: 2em;
 }
+
 .table-title {
   padding-left: 20px;
   padding-right: 20px;
@@ -203,7 +225,6 @@ export default {
 
 h1 {
   position: relative;
-  padding-left: 3vh;
   color: #fff;
 }
 .router-link {
@@ -215,7 +236,7 @@ h1 {
   background: #feebc8;
   width: 60px;
   height: 60px;
-  border-radius: 25px;
+  border-radius: 50px;
   padding-bottom: 2px;
 }
 .check-card {

@@ -1,7 +1,7 @@
 <template>
   <div class="fundo"></div>
   <header-comp />
-  <router-view class="router-view" />
+  <router-view />
 </template>
 
 <script>
@@ -17,21 +17,17 @@ export default {
 #app {
   font-family: "Poppins";
   color: #2c3e50;
-  height: 100vw;
+  height: 100%;
   background: #f0f0f0;
 }
 
 .fundo {
   position: absolute;
   width: 100vw;
-  height: 26vh;
-  left: 0px;
-  top: 0px;
+  height: 220px;
+  left: 0;
+  top: 0;
   background: rgb(32, 149, 242);
-}
-
-.router-view {
-  height: 26vh;
 }
 
 nav {

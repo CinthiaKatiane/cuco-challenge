@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pl-0 pr-0">
     <v-row>
       <v-col>
         <v-text-field
@@ -11,17 +11,20 @@
       <v-col>
         <v-text-field
           v-model="usr.cpf"
+          :rules="cpfRules"
           label="CPF"
           variant="solo"
+          placeholder="xxx.xxx.xxx-xx"
         ></v-text-field>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
         <v-text-field
-          v-model="usr.birth"
+          v-model="usr.birthdate"
           label="Data de Nascimento"
           variant="solo"
+          placeholder="aaaa-mm-dd"
         ></v-text-field>
       </v-col>
       <v-col>
@@ -29,6 +32,7 @@
           v-model="usr.phone"
           label="Telefone"
           variant="solo"
+          placeholder="(xx) xxxxx-xxxx"
         ></v-text-field>
       </v-col>
     </v-row>
@@ -39,7 +43,9 @@
         </router-link>
       </v-col>
       <v-col cols="2">
-        <v-btn color="green" @click="save"> Salvar </v-btn>
+        <v-btn :disabled="!isComplete" color="green" @click="save">
+          Salvar
+        </v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -57,8 +63,12 @@ export default {
         name: "",
         cpf: "",
         phone: "",
-        birth: "",
+        birthdate: "",
       },
+      cpfRules: [
+        (v) => !!v || "Insira um CPF",
+        (v) => /^\d{3}.\d{3}.\d{3}-\d{2}$/.test(v) || "Insira CPF valido",
+      ],
     };
   },
   created() {
@@ -66,11 +76,10 @@ export default {
       axios
         .get("http://localhost:3003/clients/" + this.userId)
         .then((res) => {
-          let userInfo = res.data;
-          this.usr.name = userInfo.name;
-          this.usr.cpf = userInfo.cpf;
-          this.usr.phone = userInfo.phone;
-          this.usr.birth = userInfo.birthdate;
+          this.usr.name = res.data.name;
+          this.usr.cpf = res.data.cpf;
+          this.usr.phone = res.data.phone;
+          this.usr.birthdate = res.data.birthdate;
         })
         .catch((error) => {
           console.log(error);
@@ -79,16 +88,26 @@ export default {
   },
   methods: {
     save() {
-      console.log(this.usr);
-      console.log("salvo");
+      if (this.userId) {
+        axios
+          .put("http://localhost:3003/clients/" + this.userId, this.usr)
+          .then((res) => {
+            console.log(res.data.id);
+          });
+      } else {
+        axios.post("http://localhost:3003/clients", this.usr).then((res) => {
+          console.log(res.data.id);
+        });
+      }
+      this.$router.push({ path: "/" });
+    },
+  },
+  computed: {
+    isComplete() {
+      return (
+        this.usr.name && this.usr.cpf && this.usr.birthdate && this.usr.phone
+      );
     },
   },
 };
 </script>
-
-<style scoped>
-.router-link {
-  text-decoration: none;
-  color: inherit;
-}
-</style>

@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <h1>Novo Cliente</h1>
-    <InputForm />
-  </div>
+  <v-container>
+    <v-row justify="center" align="center">
+      <v-col cols="10">
+        <h1>Novo Cliente</h1>
+        <InputForm />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -15,3 +19,10 @@ export default {
   },
 };
 </script>
+
+<style>
+h1 {
+  position: relative;
+  color: #fff;
+}
+</style>

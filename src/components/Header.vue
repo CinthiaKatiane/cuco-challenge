@@ -15,7 +15,11 @@
               </router-link>
             </v-col>
             <v-col cols="auto">
-              <router-link to="/add" class="router-link">
+              <router-link
+                v-if="$route.path == '/'"
+                to="/add"
+                class="router-link"
+              >
                 <v-btn
                   variant="flat"
                   size="large"
