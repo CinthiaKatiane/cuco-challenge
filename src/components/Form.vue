@@ -3,6 +3,7 @@
     <v-row>
       <v-col>
         <v-text-field
+          id="input-name"
           v-model="usr.name"
           :rules="nameRules"
           label="Nome"
@@ -11,6 +12,7 @@
       </v-col>
       <v-col>
         <v-text-field
+          id="input-cpf"
           v-model="usr.cpf"
           :rules="cpfRules"
           label="CPF"
@@ -22,6 +24,7 @@
     <v-row>
       <v-col>
         <v-text-field
+          id="input-birthdate"
           v-model="usr.birthdate"
           :rules="birthdateRules"
           label="Data de Nascimento"
@@ -31,6 +34,7 @@
       </v-col>
       <v-col>
         <v-text-field
+          id="input-phone"
           v-model="usr.phone"
           label="Telefone"
           variant="solo"
@@ -45,7 +49,7 @@
         </router-link>
       </v-col>
       <v-col cols="2">
-        <v-btn :disabled="!isComplete" color="green" @click="save">
+        <v-btn id="save" :disabled="!isComplete" color="green" @click="save">
           Salvar
         </v-btn>
       </v-col>
